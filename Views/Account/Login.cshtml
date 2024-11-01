@@ -1,0 +1,31 @@
+﻿@model NewShop.Models.Account
+
+@{
+    ViewBag.Title = "Đăng Nhập";
+}
+
+<h2>Đăng Nhập</h2>
+
+@using (Html.BeginForm("Login", "Account", FormMethod.Post))
+{
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+    <div class="mb-3">
+        @Html.LabelFor(m => m.Username, new { @class = "form-label" })
+        @Html.TextBox("username", null, new { @class = "form-control" })
+        @Html.ValidationMessage("username", "", new { @class = "text-danger" })
+    </div>
+
+    <div class="mb-3">
+        @Html.Label("Mật khẩu", new { @class = "form-label" })
+        @Html.Password("password", new { @class = "form-control" })
+        @Html.ValidationMessage("password", "", new { @class = "text-danger" })
+    </div>
+
+    <button type="submit" class="btn btn-primary">Đăng Nhập</button>
+}
+
+<p>
+    <a href="@Url.Action("RegisterCustomer", "Account")">Register as Customer</a>
+    <a href="@Url.Action("RegisterSaler", "Account")">Register as Saler</a>
+</p>

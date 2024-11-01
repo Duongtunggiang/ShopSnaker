@@ -1,0 +1,141 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - Saler Application</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <style>
+        /* CSS tùy chỉnh cho Saler */
+        .navbar {
+            background-color: #d8b64e; /* Màu vàng nâu sáng */
+        }
+
+        .dropdown-menu-custom {
+            display: none;
+            position: absolute;
+            background-color: #343a40;
+            color: white;
+            min-width: 150px;
+            border-radius: 5px;
+            padding: 10px;
+            right: 0;
+            z-index: 1000;
+        }
+
+            .dropdown-menu-custom a {
+                color: white;
+                text-decoration: none;
+                display: block;
+                padding: 5px;
+            }
+
+                .dropdown-menu-custom a:hover {
+                    background-color: #495057;
+                }
+
+        .dropdown-toggle {
+            cursor: pointer;
+        }
+
+        /* Style cho các ô vuông hiển thị thông tin */
+        .info-box {
+            background-color: #ffecb3;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            margin: 10px;
+            transition: transform 0.2s;
+        }
+
+            .info-box:hover {
+                transform: scale(1.05);
+                background-color: #ffe082; /* Màu nền khi hover */
+            }
+
+        .notification-circle {
+            background-color: red;
+            color: white;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            top: -10px;
+            right: -10px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px 0;
+            background-color: #f8f9fa; /* Màu nền footer */
+            border-top: 1px solid #dee2e6;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-sm navbar-dark">
+        <div class="container">
+            @Html.ActionLink("Saler Application", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+            <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse d-sm-inline-flex justify-content-between">
+                <ul class="navbar-nav flex-grow-1">
+                    <li>@Html.ActionLink("Home", "Saler", "Saler", new { area = "" }, new { @class = "nav-link" })</li>
+                    <li>@Html.ActionLink("My Products", "MyProducts", "Saler", new { area = "" }, new { @class = "nav-link" })</li>
+                    <li>@Html.ActionLink("Orders", "Orders", "Saler", new { area = "" }, new { @class = "nav-link" })</li>
+                </ul>
+                <ul class="navbar-nav ml-auto">
+                    @if (Session["UserName"] != null)
+                    {
+                        <li class="nav-item dropdown">
+                            <a href="#" class="nav-link dropdown-toggle" id="userMenuToggle">
+                                <i class="fas fa-user"></i> @Session["UserName"]
+                            </a>
+                            <div class="dropdown-menu-custom" id="userDropdownMenu">
+                                <a href="@Url.Action("Profile", "Account")">Trang cá nhân</a>
+                                <a href="@Url.Action("Wallet", "Account")">Ví của tôi</a>
+                                <a href="@Url.Action("Logout", "Account")">Đăng xuất</a>
+                            </div>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="nav-item">
+                            <a href="@Url.Action("Login", "Account")" class="nav-link">Login</a>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container body-content">
+        @RenderBody()
+        <hr />
+        <footer>
+            <p>&copy; @DateTime.Now.Year - Saler Application</p>
+        </footer>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("#userMenuToggle").click(function (event) {
+                event.preventDefault();
+                $("#userDropdownMenu").toggle();
+            });
+            $(document).click(function (event) {
+                if (!$(event.target).closest("#userMenuToggle, #userDropdownMenu").length) {
+                    $("#userDropdownMenu").hide();
+                }
+            });
+        });
+    </script>
+</body>
+</html>

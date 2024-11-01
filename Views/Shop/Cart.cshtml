@@ -1,0 +1,73 @@
+﻿@model NewShop.Models.Cart
+
+@{
+    ViewBag.Title = "Giỏ Hàng";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <h2>Giỏ Hàng Của Bạn</h2>
+
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#cartModal">
+        <i class="fas fa-shopping-cart"></i> Xem Giỏ Hàng
+    </button>
+
+    <div class="modal fade" id="cartModal" tabindex="-1" aria-labelledby="cartModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="cartModalLabel">Giỏ Hàng</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    @if (Model.CartItems != null && Model.CartItems.Any())
+                    {
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Tên Sản Phẩm</th>
+                                    <th>Số Lượng</th>
+                                    <th>Giá</th>
+                                    <th>Tổng</th>
+                                    <th>Hành Động</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.CartItems)
+                                {
+                                    <tr>
+                                        <td>@item.Product.ProductName</td>
+                                        <td>@item.Quantity</td>
+                                        <td>@item.Price.Value.ToString("N0") đ</td>
+                                        <td>@((item.Quantity ?? 0) * (item.Price ?? 0)).ToString("N0") đ</td>
+                                        <td>
+                                            <form action="@Url.Action("RemoveFromCart", "Shop")" method="post">
+                                                <input type="hidden" name="cartItemId" value="@item.CartItemID" />
+                                                <button class="btn btn-danger btn-sm" type="submit">Xóa</button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                        <h5>Tổng Tiền: @Model.TotalPrice.ToString("N0") đ</h5>
+                    }
+                    else
+                    {
+                        <p>Giỏ hàng của bạn hiện đang trống.</p>
+                    }
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                    <a href="@Url.Action("Checkout", "Shop")" class="btn btn-primary">Tiến Hành Thanh Toán</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script>
+        // Bạn có thể thêm các script tùy chỉnh cho modal nếu cần
+    </script>
+}
