@@ -1,0 +1,28 @@
+﻿@model NewShop.Models.Product
+
+@{
+    Layout = "~/Views/Shared/SalerLayout.cshtml";
+    ViewBag.Title = "Sửa sản phẩm";
+}
+
+<h2 class="mt-4">Sửa sản phẩm</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.ProductName)
+        @Html.TextBoxFor(model => model.ProductName, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.ProductName)
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Price)
+        @Html.TextBoxFor(model => model.Price, new { @class = "form-control", type = "number", step = "0.01" })
+        @Html.ValidationMessageFor(model => model.Price)
+    </div>
+
+    <button type="submit" class="btn btn-success">Cập nhật</button>
+    <a href="@Url.Action("MyProducts", "Saler")" class="btn btn-secondary">Quay lại</a>
+}

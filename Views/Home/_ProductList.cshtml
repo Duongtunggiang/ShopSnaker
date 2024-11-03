@@ -1,0 +1,17 @@
+﻿@model List<NewShop.Models.Product>
+
+<div class="row">
+    @foreach (var product in Model)
+    {
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <img src="@Url.Content(product.ProductImagePath ?? "~/Content/Images/no-image.png")" class="card-img-top" alt="@product.ProductName" style="height: 150px; object-fit: cover;">
+                <div class="card-body">
+                    <h5 class="card-title">@product.ProductName</h5>
+                    <p class="card-text">Giá: @product.Price</p>
+                    <a href="@Url.Action("Index", "Home", new { productId = product.ProductID })" class="btn btn-primary btn-sm">Chi tiết</a>
+                </div>
+            </div>
+        </div>
+    }
+</div>

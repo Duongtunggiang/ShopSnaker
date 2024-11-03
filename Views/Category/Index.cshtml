@@ -1,0 +1,29 @@
+﻿@model IEnumerable<NewShop.Models.Category>
+
+@{
+    Layout = "~/Views/Shared/SalerLayout.cshtml";
+    ViewBag.Title = "Danh sách danh mục";
+}
+
+<h2>Danh sách danh mục</h2>
+<a href="@Url.Action("Create", "Category")" class="btn btn-primary mb-3">Thêm danh mục mới</a>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Tên danh mục</th>
+            <th>Ảnh danh mục</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var category in Model)
+        {
+            <tr>
+                <td>@category.CategoryID</td>
+                <td>@category.CategoryName</td>
+                <td>@category.BrandImagePath</td>
+            </tr>
+        }
+    </tbody>
+</table>
+<a href='@Url.Action("CreateProduct","Saler")' class="btn btn-outline-danger">Thoát</a>

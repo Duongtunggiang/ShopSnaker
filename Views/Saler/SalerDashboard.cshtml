@@ -9,23 +9,29 @@
 <div class="row">
     <div class="col-md-4">
         <div class="info-box">
-            <h5>Hàng Hóa</h5>
-            <div class="notification-circle">5</div>
-            <p>Quản lý các sản phẩm của bạn</p>
+            <a href="@Url.Action("MyProducts", "Saler")" class="text-decoration-none text-dark">
+                <h5>Hàng Hóa</h5>
+                <div class="notification-circle">5</div>
+                <p>Quản lý các sản phẩm của bạn</p>
+            </a>
         </div>
     </div>
     <div class="col-md-4">
         <div class="info-box">
-            <h5>Đơn Hàng</h5>
-            <div class="notification-circle">2</div>
-            <p>Xem và quản lý đơn hàng</p>
+            <a href="@Url.Action("Orders", "Saler")" class="text-decoration-none text-dark">
+                <h5>Đơn Hàng</h5>
+                <div class="notification-circle">2</div>
+                <p>Xem và quản lý đơn hàng</p>
+            </a>
         </div>
     </div>
     <div class="col-md-4">
         <div class="info-box">
-            <h5>Khách Hàng</h5>
-            <div class="notification-circle">3</div>
-            <p>Thông tin về khách hàng của bạn</p>
+            <a href="@Url.Action("Customers", "Saler")" class="text-decoration-none text-dark">
+                <h5>Khách Hàng</h5>
+                <div class="notification-circle">3</div>
+                <p>Thông tin về khách hàng của bạn</p>
+            </a>
         </div>
     </div>
 </div>

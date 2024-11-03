@@ -1,33 +1,116 @@
-﻿@{
-    ViewBag.Title = "Home Page";
+﻿@model NewShop.Models.HomeViewModel
+
+@{
+    ViewBag.Title = "Trang chủ";
 }
 
-<main>
-    <section class="row" aria-labelledby="aspnetTitle">
-        <h1 id="title">ASP.NET</h1>
-        <p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS and JavaScript.</p>
-        <p><a href="https://asp.net" class="btn btn-primary btn-md">Learn more &raquo;</a></p>
-    </section>
-
+<div class="container-fluid">
     <div class="row">
-        <section class="col-md-4" aria-labelledby="gettingStartedTitle">
-            <h2 id="gettingStartedTitle">Getting started</h2>
-            <p>
-                ASP.NET MVC gives you a powerful, patterns-based way to build dynamic websites that
-                enables a clean separation of concerns and gives you full control over markup
-                for enjoyable, agile development.
-            </p>
-            <p><a class="btn btn-outline-dark" href="https://go.microsoft.com/fwlink/?LinkId=301865">Learn more &raquo;</a></p>
-        </section>
-        <section class="col-md-4" aria-labelledby="librariesTitle">
-            <h2 id="librariesTitle">Get more libraries</h2>
-            <p>NuGet is a free Visual Studio extension that makes it easy to add, remove, and update libraries and tools in Visual Studio projects.</p>
-            <p><a class="btn btn-outline-dark" href="https://go.microsoft.com/fwlink/?LinkId=301866">Learn more &raquo;</a></p>
-        </section>
-        <section class="col-md-4" aria-labelledby="hostingTitle">
-            <h2 id="hostingTitle">Web Hosting</h2>
-            <p>You can easily find a web hosting company that offers the right mix of features and price for your applications.</p>
-            <p><a class="btn btn-outline-dark" href="https://go.microsoft.com/fwlink/?LinkId=301867">Learn more &raquo;</a></p>
-        </section>
+        <!-- Cột bên trái: Danh sách danh mục -->
+        <div class="col-md-3">
+            <h3>Danh mục</h3>
+            <ul class="list-group">
+                <li class="list-group-item">
+                    <button id="btnAllProducts" class="btn btn-primary btn-sm w-100">Tất cả sản phẩm</button>
+                </li>
+                @foreach (var category in Model.Category)
+                {
+                    <li class="list-group-item">
+                        <input type="checkbox" class="category-checkbox" value="@category.CategoryID" id="category_@category.CategoryID" />
+                        <label for="category_@category.CategoryID">@category.CategoryName</label>
+                    </li>
+                }
+            </ul>
+        </div>
+
+        <!-- Phần giữa: Danh sách sản phẩm -->
+        <div class="col-md-6" id="product-list">
+            <h3>Danh sách sản phẩm</h3>
+            <div class="row">
+                @foreach (var product in Model.Product)
+                {
+                    <div class="col-md-4 mb-4">
+                        <div class="card">
+                            <img src="@Url.Content(string.IsNullOrEmpty(product.ProductImagePath) ? "~/images/default.jpg" : product.ProductImagePath)"
+                                 class="card-img-top" alt="@product.ProductName" style="height: 150px; object-fit: cover;">
+                            <div class="card-body">
+                                <h5 class="card-title">@product.ProductName</h5>
+                                <p class="card-text">Giá: @product.Price</p>
+                                <a href="@Url.Action("Index", "Home", new { productId = product.ProductID })" class="btn btn-primary btn-sm">
+                                    Chi tiết
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+
+        <!-- Cột bên phải: Thông tin chi tiết sản phẩm -->
+        <div class="col-md-3" style="position: sticky; top: 0;">
+            <h3>Chi tiết sản phẩm</h3>
+            @if (Model.ProductDetail != null)
+            {
+                <div class="card">
+                    @if (!string.IsNullOrEmpty(Model.ProductDetail.ProductImagePath))
+                    {
+                        <img src="@Url.Content(Model.ProductDetail.ProductImagePath)" class="card-img-top" alt="@Model.ProductDetail.ProductName" style="height: 200px; object-fit: cover;">
+                    }
+                    else
+                    {
+                        <div class="card-img-top" style="height: 200px; display: flex; align-items: center; justify-content: center; background-color: #f0f0f0;">
+                            <span>Không có ảnh</span>
+                        </div>
+                    }
+                    <div class="card-body">
+                        <h4>@Model.ProductDetail.ProductName</h4>
+                        <p>Giá: @Model.ProductDetail.Price</p>
+                        <p>Màu sắc: @Model.ProductDetail.Color</p>
+                        <p>Kiểu dáng: @Model.ProductDetail.Style</p>
+                        <p>Giảm giá: @Model.ProductDetail.Discount%</p>
+                        <p>Số lượng còn: @Model.ProductDetail.Quality</p>
+                        <p>Danh mục: @Model.ProductDetail.Category.CategoryName</p>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <p>Chọn sản phẩm để xem chi tiết.</p>
+            }
+        </div>
     </div>
-</main>
+</div>
+
+@section Scripts {
+    <script>
+        // Xử lý khi nhấn nút "Tất cả sản phẩm"
+        document.getElementById('btnAllProducts').addEventListener('click', function() {
+            $('.category-checkbox').prop('checked', false); // Bỏ chọn tất cả checkbox
+            loadProducts([]); // Gọi AJAX với danh sách rỗng để hiển thị tất cả sản phẩm
+        });
+
+        // Chức năng loadProducts sẽ cần được định nghĩa để gọi AJAX
+        function loadProducts(categoryIds) {
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("FilterProducts", "Home")',
+                data: { categoryIds: categoryIds },
+                success: function (data) {
+                    $('#product-list').html(data); // Cập nhật danh sách sản phẩm
+                },
+                error: function (xhr, status, error) {
+                    console.error("Error loading products: " + error);
+                }
+            });
+        }
+
+        // Xử lý sự kiện khi checkbox thay đổi
+        $('.category-checkbox').change(function() {
+            const selectedCategories = $('.category-checkbox:checked').map(function() {
+                return this.value;
+            }).get();
+
+            loadProducts(selectedCategories); // Gọi AJAX với danh sách đã chọn
+        });
+    </script>
+}

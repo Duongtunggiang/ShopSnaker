@@ -15,6 +15,7 @@ namespace Shop.Controllers
         }
 
         // GET: Giỏ hàng
+        //[Authorize]
         public ActionResult Cart()
         {
             // Giả sử ID của giỏ hàng được lưu trong Session
@@ -33,6 +34,7 @@ namespace Shop.Controllers
         }
 
         // Phương thức thêm sản phẩm vào giỏ hàng
+        //[Authorize]
         [HttpPost]
         public ActionResult AddToCart(int productId, int quantity)
         {
@@ -65,6 +67,7 @@ namespace Shop.Controllers
         }
 
         // Phương thức xóa sản phẩm khỏi giỏ hàng
+        //[Authorize]
         [HttpPost]
         public ActionResult RemoveFromCart(int cartItemId)
         {
